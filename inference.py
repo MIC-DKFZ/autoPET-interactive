@@ -12,7 +12,8 @@ from nnunetv2.inference.autopet_predictor import autoPETPredictor
 from nnunetv2.training.dataloading.nnInteractive_clicks import PointInteraction_stub
 
 '''
-docker run --rm --platform=linux/amd64 --network none --gpus all --volume /path/to/your/test/cases/input:/input --volume /path/to/your/test/cases/output:/output autopet4
+Sample docker run command:
+docker run --rm --platform=linux/amd64 --network none --gpus all --volume /path/to/your/test/cases/input:/input --volume /path/to/your/test/cases/output:/output lesionlocator-autopet
 '''
 
 # LOCAL TEST
@@ -21,11 +22,10 @@ PET_INPUT_PATH = Path("/input/images/pet/")
 CLICKS_INPUT_PATH = Path("/input/lesion-clicks.json")
 OUTPUT_PATH = Path("/output/images/tumor-lesion-segmentation/")
 
-RESOURCE_PATH = Path("path/to/checkpoint/")  # Change this to the path where you have stored the nnUNet model checkpoints
+RESOURCE_PATH = Path("_model") # For normal inference: change this to the path where you have stored the nnUNet model checkpoints
 POINT_WIDTH = 2
 
 def run():
-    # Read the input
     # Read the input
     input_array_ct, spacing, direction, origin, uuid = load_image_file_as_array(
         location=CT_INPUT_PATH,
@@ -41,7 +41,6 @@ def run():
     # Process the inputs: any way you'd like
     _show_torch_cuda_info()
 
-    ############# Lines You can change ###########
     # Set the environment variable to handle memory fragmentation
     os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
     # os.environ['nnUNet_compile'] = '1'
@@ -60,7 +59,7 @@ def run():
     predictor = autoPETPredictor(
         tile_step_size=0.5,
         use_gaussian=True,
-        use_mirroring=True,
+        use_mirroring=True, # Set for False for faster inference on GC
         perform_everything_on_device=True,
         device=device,
         verbose=True,
@@ -68,7 +67,7 @@ def run():
         allow_tqdm=True
         )
     predictor.initialize_from_trained_model_folder(RESOURCE_PATH, 
-                                                    use_folds=(0,1,2,3,4), 
+                                                    use_folds=(0,1,2,3,4,5,6,7,8,9), 
                                                     checkpoint_name='checkpoint_final.pth')
     
     input_array = input_array.astype(np.half)
@@ -77,7 +76,6 @@ def run():
     start = time.time()
     ret = predictor.predict_single_npy_array(input_array, props, clicks, POINT_WIDTH, None, None, False)
     print("Time taken for prediction: ", time.time() - start)
-
 
     # import napari
     # viewer = napari.Viewer()

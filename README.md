@@ -69,7 +69,7 @@ We train a five fold cross-validation for our final submission. Note that we per
 
 ### Inference
 
-After training your own model or [downloading our final checkpoint here](https://drive.google.com/file/d/1vn7yaD12CVlnNQMwNn6SG_ZoORLvs4rf/view?usp=sharing) you can use an adapted version of the nnUNet inference, for more information see [here](nnunetv2/inference/autopet_predictor.py) and [here](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/how_to_use_nnunet.md). A script to perform python based inference and docker building for Grand Challenge is provided in the [inference.py](inference.py). RESOURCE_PATH refers to the folder containing all 5 folds.
+After training your own model or [downloading our final checkpoint here](https://drive.google.com/file/d/1bbzXmwAYslC3COU44uEUaBT0vuOL3NTU/view?usp=sharing) you can use an adapted version of the nnUNet inference, for more information see [here](nnunetv2/inference/autopet_predictor.py) and [here](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/how_to_use_nnunet.md). A script to perform python based inference and docker building for Grand Challenge is provided in the [inference.py](inference.py). RESOURCE_PATH refers to the `_model` folder containing all 10 folds. After copying the checkpoint you can run `build.sh` to build a docker container.
 
 Happy coding! 🚀
 
